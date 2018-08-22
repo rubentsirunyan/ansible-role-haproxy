@@ -20,13 +20,13 @@ defaults
   option  httplog
   option  dontlognull
 {% if haproxy_version == '1.4' %}
-        contimeout 5000
-        clitimeout 50000
-        srvtimeout 50000
+  contimeout 5000
+  clitimeout 50000
+  srvtimeout 50000
 {% else %}
-        timeout connect 5000
-        timeout client 50000
-        timeout server 50000
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
 {% endif %}
 {% if ansible_os_family == 'Debian' %}
   errorfile 400 /etc/haproxy/errors/400.http
@@ -42,17 +42,17 @@ defaults
 frontend {{ frontend.name }}
     bind {{ frontend.bind_address }}:{{ frontend.bind_port }}
     mode {{ frontend.mode }}
-    {% for timeout in frontend.timeouts %}
+{% for timeout in frontend.timeouts %}
     timeout {{ timeout }}
-    {% endfor %}
-    {% for option in frontend.options %}
+{% endfor %}
+{% for option in frontend.options %}
     option {{ option }}
-    {% endfor %}
-    {% for param in frontend.additional_parameters %}
+{% endfor %}
+{% for param in frontend.additional_parameters %}
     {{ param }}
-    {% endfor %}
+{% endfor %}
     balance {{ frontend.balance_method }}
-    {% for backend_node in frontend.backend_servers %}
+{% for backend_node in frontend.backend_servers %}
     server {{ backend_node.name }} {{ backend_node.address }} {{ backend_node.additional_parameters }}
-    {% endfor %}
+{% endfor %}
 {% endfor %}
